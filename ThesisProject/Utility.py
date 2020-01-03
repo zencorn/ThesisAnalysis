@@ -27,11 +27,20 @@ class TestUtility:
     # def __init__(self):
         #filePath = cf['LogFile']['userPWD']
     def getDBCountryList():
+        '''
+        () -> number							Type Contract
+        Return the area of a triangel with dimensions base		Description
+        and height.
+        >> area(10,5)									Example
+        25.0
+        >> area(2.5,3)									Body
+        3.75
+        '''
         conn = pymysql.connect(host,user,pwd,dbName,cursorclass=pymysql.cursors.DictCursor)
         cursor = conn.cursor()
-        cursor.execute("select *from DevelopedCountry where `Country Name` = 'Australia'")
+        cursor.execute("select *from DevelopedCountry where `CountryName` = 'Australia'")
         counResult = cursor.fetchall()
-        counResult[0].pop("Country Name")
+        counResult[0].pop("CountryName")
         counResult[0].pop("Country Code")
         counDic = counResult[0]
         cursor.close()
@@ -42,23 +51,32 @@ class TestUtility:
 
         conn = pymysql.connect(host, user, pwd, dbName, cursorclass=pymysql.cursors.DictCursor)
         cursor = conn.cursor()
-        sqlStr = "select *from DevelopedCountry where `Country Name` = '{CouName}'" .format(
+        sqlStr = "select *from developedcountrygpe where `CountryName` = '{CouName}'" .format(
             CouName = countryName
         )
         cursor.execute(sqlStr)
         counResult = cursor.fetchall()
-        counResult[0].pop("Country Name")
+        counResult[0].pop("CountryName")
         counResult[0].pop("Country Code")
         counDic = counResult[0]
         couYList = list(counDic.values())
         couYList = list(map(float, couYList))
-        yItem = []
-        for i in couYList:
-            yItem.append(int(i))
 
         cursor.close()
         conn.close()
-        return yItem
+        return couYList
+
+    def getDevCountryList():
+        conn = pymysql.connect(host, user, pwd, dbName)
+                               # cursorclass=pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
+        sqlStr = "select CountryName from developedcountry "
+        cursor.execute(sqlStr)
+        counResult = cursor.fetchall()
+        couList = list(counResult)
+        cursor.close()
+        conn.close()
+        return couList
 
     def convFlStr(self,val):
         if isinstance(val,float):
